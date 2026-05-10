@@ -1,4 +1,3 @@
-const pageLoader = document.getElementById('pageLoader');
 const header = document.getElementById('header');
 const navLinks = document.querySelectorAll('.nav-link');
 const mobileToggle = document.getElementById('mobileToggle');
@@ -21,11 +20,6 @@ let currentTestimonial = 0;
 let typedIndex = 0;
 let charIndex = 0;
 let typingForward = true;
-
-window.addEventListener('load', () => {
-  pageLoader.style.display = 'none';
-  document.body.classList.add('loaded');
-});
 
 const closeMenu = () => {
   navMenu.classList.remove('open');
@@ -146,8 +140,16 @@ window.addEventListener('scroll', () => {
 });
 
 themeToggle.addEventListener('click', () => {
-  document.documentElement.classList.toggle('light-theme');
-  themeToggle.classList.toggle('dark');
+  const isLight = document.documentElement.classList.toggle('light-theme');
+  const icon = themeToggle.querySelector('i');
+  
+  if (isLight) {
+    icon.className = 'fas fa-moon';
+    themeToggle.classList.add('dark');
+  } else {
+    icon.className = 'fas fa-sun';
+    themeToggle.classList.remove('dark');
+  }
 });
 
 scrollTop.addEventListener('click', () => {
@@ -208,7 +210,6 @@ contactForm.addEventListener('submit', (event) => {
     return;
   }
 
-  // Allow the form to submit normally (so the backend/email handler can send you the message)
   document.getElementById('formStatus').textContent = 'Sending message...';
   document.getElementById('formStatus').style.color = '#7c5cff';
 });
