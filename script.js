@@ -188,7 +188,9 @@ filterButtons.forEach((button) => {
 //   showTestimonial(0);
 // }
 
-contactForm.addEventListener('submit', (event) => {
+contactForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
   const name = document.getElementById('name');
   const email = document.getElementById('email');
   const message = document.getElementById('message');
@@ -204,7 +206,6 @@ contactForm.addEventListener('submit', (event) => {
   document.getElementById('messageError').textContent = errors.message ? 'Please enter a message.' : '';
 
   if (errors.name || errors.email || errors.message) {
-    event.preventDefault();
     document.getElementById('formStatus').textContent = 'Please fix the errors above.';
     document.getElementById('formStatus').style.color = '#ff7f8d';
     return;
@@ -212,6 +213,25 @@ contactForm.addEventListener('submit', (event) => {
 
   document.getElementById('formStatus').textContent = 'Sending message...';
   document.getElementById('formStatus').style.color = '#7c5cff';
+
+  try {
+    const response = await fetch(contactForm.action, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(Object.fromEntries(new FormData(contactForm))),
+    });
+
+    if (response.ok) {
+      document.getElementById('formStatus').textContent = 'Success! Your message has been sent.';
+      document.getElementById('formStatus').style.color = '#2ecc71';
+      contactForm.reset();
+    } else {
+      throw new Error();
+    }
+  } catch (err) {
+    document.getElementById('formStatus').textContent = 'Submission failed. Please ensure your email is verified with FormSubmit.';
+    document.getElementById('formStatus').style.color = '#ff7f8d';
+  }
 });
 
 window.addEventListener('mousemove', (event) => {
