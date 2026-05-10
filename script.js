@@ -195,6 +195,13 @@ contactForm.addEventListener('submit', async (event) => {
   const email = document.getElementById('email');
   const message = document.getElementById('message');
 
+  // Check if the page is being viewed as a local file
+  if (window.location.protocol === 'file:') {
+    document.getElementById('formStatus').textContent = 'Error: FormSubmit requires a Web Server to function. Please open this project using "Live Server" in VS Code.';
+    document.getElementById('formStatus').style.color = '#ff7f8d';
+    return;
+  }
+
   const errors = {
     name: name.value.trim() === '',
     email: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value),
